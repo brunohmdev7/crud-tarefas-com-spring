@@ -1,10 +1,11 @@
 package com.example.crudtarefascomspring.app;
 
-import com.example.crudtarefascomspring.repository.TarefaRepository;
 import com.example.crudtarefascomspring.service.TarefaService;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
+
+// atualizar os métodos no switch com funções modularizadas + derived queries
 
 @Component
 public class Principal {
@@ -17,24 +18,29 @@ public class Principal {
 
     public void exibirMenu() {
         Scanner teclado = new Scanner(System.in);
-        TarefaRepository tarefaRepo = new TarefaRepository();
+        int opcao = -1;
 
-        String opcao = "";
+        while (opcao != -1) {
+            System.out.println("""=== CRUD DE TAREFAS ===
+                                    1. Adicionar nova tarefa
+                                    2. Listar todas as tarefas
+                                    3. Atualizar a descrição de uma tarefa
+                                    4. Concluir uma tarefa
+                                    5. Deletar uma tarefa
+                                    -1. Sair""");
+            opcao = teclado.nextInt();
 
-        while (!opcao.equals("-1")) {
-            tarefaRepo.exibirMenu();
-            opcao = teclado.nextLine();
             switch (opcao) {
-                case "1":
+                case 1:
                     System.out.println("Descreva sua tarefa: ");
                     String descricao = teclado.nextLine();
                     tarefaRepo.criarTarefa(descricao);
                     break;
-                case "2":
+                case 2:
                     tarefaRepo.listarTarefas();
                     tarefaRepo.retornarAoMenu();
                     break;
-                case "3":
+                case 3:
                     System.out.println("Digite a posição que deseja atualizar:");
                     int posicao = teclado.nextInt();
                     posicao -= 1;
@@ -43,21 +49,21 @@ public class Principal {
                     String descricaoNova = teclado.nextLine();
                     tarefaRepo.atualizarDescricao(posicao, descricaoNova);
                     break;
-                case "4":
+                case 4:
                     System.out.println("Digite a posição que deseja atualizar:");
                     posicao = teclado.nextInt();
                     posicao -= 1;
                     tarefaRepo.marcarConcluida(posicao);
                     teclado.nextLine();
                     break;
-                case "5":
+                case 5:
                     System.out.println("Digite a posição da tarefa que deseja excluir:");
                     posicao = teclado.nextInt();
                     posicao -= 1;
                     tarefaRepo.excluirTarefa(posicao);
                     teclado.nextLine();
                     break;
-                case "-1":
+                case -1:
                     System.out.println("Programa encerrado.");
                     break;
                 default:
