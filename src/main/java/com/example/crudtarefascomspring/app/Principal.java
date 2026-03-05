@@ -1,9 +1,20 @@
 package com.example.crudtarefascomspring.app;
 
 import com.example.crudtarefascomspring.repository.TarefaRepository;
+import com.example.crudtarefascomspring.service.TarefaService;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
+@Component
 public class Principal {
+
+    private final TarefaService tarefaService;
+
+    public Principal(TarefaService tarefaService) {
+        this.tarefaService = tarefaService;
+    }
+
     public void exibirMenu() {
         Scanner teclado = new Scanner(System.in);
         TarefaRepository tarefaRepo = new TarefaRepository();
