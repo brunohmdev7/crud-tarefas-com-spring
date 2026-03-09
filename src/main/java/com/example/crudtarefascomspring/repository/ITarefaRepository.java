@@ -11,4 +11,6 @@ public interface ITarefaRepository extends JpaRepository<Tarefa, Long> {
     List<Tarefa> findAll();
 
     List<Tarefa> findAllByConcluidaIs(Boolean concluida);
+
+    Tarefa findFirstById(long id);
 }
