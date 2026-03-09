@@ -27,7 +27,7 @@ public class Principal {
                                     \n=== CRUD DE TAREFAS ===
                                     1. Adicionar nova tarefa
                                     2. Listar todas as tarefas
-                                    3. Listar tarefas conlcuídas
+                                    3. Listar tarefas concluídas
                                     4. Listar tarefas em andamento
                                     5. Atualizar a descrição de uma tarefa
                                     6. Concluir uma tarefa
