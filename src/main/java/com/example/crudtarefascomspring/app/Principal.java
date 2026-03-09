@@ -1,53 +1,51 @@
 package com.example.crudtarefascomspring.app;
 
-import com.example.crudtarefascomspring.repository.TarefaRepository;
+import com.example.crudtarefascomspring.model.Tarefa;
+import com.example.crudtarefascomspring.service.TarefaService;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
+// atualizar os métodos no switch com funções modularizadas + derived queries
+
+@Component
 public class Principal {
+    Scanner teclado = new Scanner(System.in);
+    private final TarefaService tarefaService;
+
+    public Principal(TarefaService tarefaService) {
+        this.tarefaService = tarefaService;
+    }
+
     public void exibirMenu() {
-        Scanner teclado = new Scanner(System.in);
-        TarefaRepository tarefaRepo = new TarefaRepository();
+        int opcao = -1;
 
-        String opcao = "";
+        while (opcao != 0) {
+            System.out.println("""
+                                    === CRUD DE TAREFAS ===
+                                    1. Adicionar nova tarefa
+                                    2. Listar todas as tarefas
+                                    3. Atualizar a descrição de uma tarefa
+                                    4. Concluir uma tarefa
+                                    5. Deletar uma tarefa
+                                    0. Sair
+                                """);
+            opcao = teclado.nextInt();
 
-        while (!opcao.equals("-1")) {
-            tarefaRepo.exibirMenu();
-            opcao = teclado.nextLine();
             switch (opcao) {
-                case "1":
-                    System.out.println("Descreva sua tarefa: ");
-                    String descricao = teclado.nextLine();
-                    tarefaRepo.criarTarefa(descricao);
+                case 1:
+                    adicionarNovaTarefa();
                     break;
-                case "2":
-                    tarefaRepo.listarTarefas();
-                    tarefaRepo.retornarAoMenu();
+                case 2:
                     break;
-                case "3":
-                    System.out.println("Digite a posição que deseja atualizar:");
-                    int posicao = teclado.nextInt();
-                    posicao -= 1;
-                    teclado.nextLine(); // limpa o "\n" do nextInt();
-                    System.out.println("Descreva sua nova tarefa: ");
-                    String descricaoNova = teclado.nextLine();
-                    tarefaRepo.atualizarDescricao(posicao, descricaoNova);
+                case 3:
                     break;
-                case "4":
-                    System.out.println("Digite a posição que deseja atualizar:");
-                    posicao = teclado.nextInt();
-                    posicao -= 1;
-                    tarefaRepo.marcarConcluida(posicao);
-                    teclado.nextLine();
+                case 4:
                     break;
-                case "5":
-                    System.out.println("Digite a posição da tarefa que deseja excluir:");
-                    posicao = teclado.nextInt();
-                    posicao -= 1;
-                    tarefaRepo.excluirTarefa(posicao);
-                    teclado.nextLine();
+                case 5:
                     break;
-                case "-1":
-                    System.out.println("Programa encerrado.");
+                case 0:
+                    System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -55,5 +53,13 @@ public class Principal {
             }
         }
 
+    }
+
+    private void adicionarNovaTarefa() {
+        System.out.println("Descreva a tarefa que deseja adicionar: ");
+        teclado.nextLine();
+        String descricaoNovaTarefa = teclado.nextLine();
+        Tarefa novaTarefa = new Tarefa(descricaoNovaTarefa, false);
+        tarefaService.adicionarTarefa(novaTarefa);
     }
 }

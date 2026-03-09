@@ -1,13 +1,19 @@
 package com.example.crudtarefascomspring.model;
 
-import java.util.UUID;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "tarefas")
 public class Tarefa {
-    private UUID id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+
     private String descricao;
     private boolean concluida;
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
@@ -35,12 +41,9 @@ public class Tarefa {
         this.concluida = concluida;
     }
 
-    public Tarefa() {
-        this.id = UUID.randomUUID();
-    }
+    public Tarefa() {}
 
     public Tarefa(String descricao, boolean concluida) {
-        this.id = UUID.randomUUID();
         this.descricao = descricao;
         this.concluida = concluida;
     }
