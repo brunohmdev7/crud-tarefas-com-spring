@@ -4,9 +4,8 @@ import com.example.crudtarefascomspring.model.Tarefa;
 import com.example.crudtarefascomspring.service.TarefaService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
-
-// atualizar os métodos no switch com funções modularizadas + derived queries
 
 @Component
 public class Principal {
@@ -22,12 +21,14 @@ public class Principal {
 
         while (opcao != 0) {
             System.out.println("""
-                                    === CRUD DE TAREFAS ===
+                                    \n=== CRUD DE TAREFAS ===
                                     1. Adicionar nova tarefa
                                     2. Listar todas as tarefas
-                                    3. Atualizar a descrição de uma tarefa
-                                    4. Concluir uma tarefa
-                                    5. Deletar uma tarefa
+                                    3. Listar tarefas concluídas
+                                    4. Listar tarefas em andamento
+                                    5. Atualizar a descrição de uma tarefa
+                                    6. Concluir uma tarefa
+                                    7. Deletar uma tarefa
                                     0. Sair
                                 """);
             opcao = teclado.nextInt();
@@ -37,12 +38,20 @@ public class Principal {
                     adicionarNovaTarefa();
                     break;
                 case 2:
+                    listarTodasTarefas();
                     break;
                 case 3:
+                    listarTarefasConcluidas();
                     break;
                 case 4:
+                    listarTarefasEmAndamento();
                     break;
                 case 5:
+                    atualizarDescricao();
+                    break;
+                case 6:
+                    break;
+                case 7:
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -60,6 +69,61 @@ public class Principal {
         teclado.nextLine();
         String descricaoNovaTarefa = teclado.nextLine();
         Tarefa novaTarefa = new Tarefa(descricaoNovaTarefa, false);
-        tarefaService.adicionarTarefa(novaTarefa);
+        tarefaService.adicionarTarefaNoBanco(novaTarefa);
+    }
+
+    private void listarTodasTarefas() {
+        List<Tarefa> tarefas = tarefaService.retornaTodasTarefas();
+        int contador = 1;
+
+        if (tarefas.size() == 0) {
+            System.out.println("Não há tarefas no momento.");
+        } else {
+            for (Tarefa tarefa : tarefas) {
+                System.out.println("Tarefa " + contador + " - " + tarefa.getDescricao());
+                contador++;
+            }
+        }
+    }
+
+    private void listarTarefasConcluidas() {
+        List<Tarefa> concluidas = tarefaService.retornaConcluidas();
+        int contador = 1;
+
+        if (concluidas.size() == 0) {
+            System.out.println("Não há tarefas concluídas no momento.");
+        } else {
+            for (Tarefa concluida : concluidas) {
+                System.out.println("Tarefa " + contador + " - " + concluida.getDescricao());
+                contador++;
+            }
+        }
+    }
+
+    private void listarTarefasEmAndamento() {
+        List<Tarefa> naoConcluidas = tarefaService.retornaNaoConcluidas();
+        int contador = 1;
+
+        if (naoConcluidas.size() == 0) {
+            System.out.println("Não há tarefas em andamento no momento.");
+        } else {
+            for (Tarefa naoConcluida : naoConcluidas) {
+                System.out.println("Tarefa " + contador + " - " + naoConcluida.getDescricao());
+                contador++;
+            }
+        }
+    }
+
+    private void atualizarDescricao() {
+        listarTodasTarefas();
+
+        System.out.println("Digite o número da tarefa que você deseja alterar: ");
+        long idTarefa = teclado.nextInt();
+        teclado.nextLine();
+        Tarefa tarefa = tarefaService.buscaPorId(idTarefa);
+        System.out.println("Agora digite a descrição nova: ");
+        String novaDescricao = teclado.nextLine();
+        tarefa.setDescricao(novaDescricao);
+        tarefaService.adicionarTarefaNoBanco(tarefa);
     }
 }
