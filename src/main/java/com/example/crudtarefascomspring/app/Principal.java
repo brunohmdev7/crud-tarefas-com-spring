@@ -1,5 +1,6 @@
 package com.example.crudtarefascomspring.app;
 
+import com.example.crudtarefascomspring.model.Tarefa;
 import com.example.crudtarefascomspring.service.TarefaService;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 @Component
 public class Principal {
-
+    Scanner teclado = new Scanner(System.in);
     private final TarefaService tarefaService;
 
     public Principal(TarefaService tarefaService) {
@@ -17,54 +18,34 @@ public class Principal {
     }
 
     public void exibirMenu() {
-        Scanner teclado = new Scanner(System.in);
         int opcao = -1;
 
-        while (opcao != -1) {
-            System.out.println("""=== CRUD DE TAREFAS ===
+        while (opcao != 0) {
+            System.out.println("""
+                                    === CRUD DE TAREFAS ===
                                     1. Adicionar nova tarefa
                                     2. Listar todas as tarefas
                                     3. Atualizar a descrição de uma tarefa
                                     4. Concluir uma tarefa
                                     5. Deletar uma tarefa
-                                    -1. Sair""");
+                                    0. Sair
+                                """);
             opcao = teclado.nextInt();
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Descreva sua tarefa: ");
-                    String descricao = teclado.nextLine();
-                    tarefaRepo.criarTarefa(descricao);
+                    adicionarNovaTarefa();
                     break;
                 case 2:
-                    tarefaRepo.listarTarefas();
-                    tarefaRepo.retornarAoMenu();
                     break;
                 case 3:
-                    System.out.println("Digite a posição que deseja atualizar:");
-                    int posicao = teclado.nextInt();
-                    posicao -= 1;
-                    teclado.nextLine(); // limpa o "\n" do nextInt();
-                    System.out.println("Descreva sua nova tarefa: ");
-                    String descricaoNova = teclado.nextLine();
-                    tarefaRepo.atualizarDescricao(posicao, descricaoNova);
                     break;
                 case 4:
-                    System.out.println("Digite a posição que deseja atualizar:");
-                    posicao = teclado.nextInt();
-                    posicao -= 1;
-                    tarefaRepo.marcarConcluida(posicao);
-                    teclado.nextLine();
                     break;
                 case 5:
-                    System.out.println("Digite a posição da tarefa que deseja excluir:");
-                    posicao = teclado.nextInt();
-                    posicao -= 1;
-                    tarefaRepo.excluirTarefa(posicao);
-                    teclado.nextLine();
                     break;
-                case -1:
-                    System.out.println("Programa encerrado.");
+                case 0:
+                    System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -72,5 +53,13 @@ public class Principal {
             }
         }
 
+    }
+
+    private void adicionarNovaTarefa() {
+        System.out.println("Descreva a tarefa que deseja adicionar: ");
+        teclado.nextLine();
+        String descricaoNovaTarefa = teclado.nextLine();
+        Tarefa novaTarefa = new Tarefa(descricaoNovaTarefa, false);
+        tarefaService.adicionarTarefa(novaTarefa);
     }
 }
