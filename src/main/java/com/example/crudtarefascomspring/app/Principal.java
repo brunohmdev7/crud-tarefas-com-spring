@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
-// continuar a desenvolver ultimas 2 funcionalidades
-
 @Component
 public class Principal {
     Scanner teclado = new Scanner(System.in);
