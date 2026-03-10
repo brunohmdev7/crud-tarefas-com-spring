@@ -29,11 +29,11 @@ public class Tarefa {
         return concluida;
     }
 
-    public String isConcluida() {
+    public String isConcluidaPorExtenso() {
         if (this.concluida == true) {
-            return "Sim";
+            return "Concluída";
         } else {
-            return "Não";
+            return "Em andamento";
         }
     }
 

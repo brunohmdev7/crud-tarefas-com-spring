@@ -22,6 +22,8 @@ public class TarefaService {
 
     public Tarefa buscaPorId(long id) { return tarefaRepository.findFirstById(id); }
 
+    public Tarefa deletaPorId(long id) { return tarefaRepository.deleteTarefaByIdIs(id); }
+
     public TarefaService(ITarefaRepository tarefaRepository) {
         this.tarefaRepository = tarefaRepository;
     }
