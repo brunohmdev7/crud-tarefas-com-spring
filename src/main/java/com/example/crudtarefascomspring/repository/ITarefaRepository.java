@@ -1,6 +1,7 @@
 package com.example.crudtarefascomspring.repository;
 
 import com.example.crudtarefascomspring.model.Tarefa;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,7 @@ public interface ITarefaRepository extends JpaRepository<Tarefa, Long> {
     List<Tarefa> findAllByConcluidaIs(Boolean concluida);
 
     Tarefa findFirstById(long id);
+
+    @Transactional
+    Tarefa deleteTarefaByIdIs(long id);
 }

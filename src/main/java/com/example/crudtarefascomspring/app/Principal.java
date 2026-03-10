@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
+// continuar a desenvolver ultimas 2 funcionalidades
+
 @Component
 public class Principal {
     Scanner teclado = new Scanner(System.in);
@@ -50,8 +52,10 @@ public class Principal {
                     atualizarDescricao();
                     break;
                 case 6:
+                    concluirTarefa();
                     break;
                 case 7:
+                    deletarTarefa();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -80,7 +84,8 @@ public class Principal {
             System.out.println("Não há tarefas no momento.");
         } else {
             for (Tarefa tarefa : tarefas) {
-                System.out.println("Tarefa " + contador + " - " + tarefa.getDescricao());
+                System.out.println("Tarefa " + contador + " - " + tarefa.getDescricao() + " - " + tarefa.isConcluidaPorExtenso()
+                + " - ID: " + tarefa.getId());
                 contador++;
             }
         }
@@ -117,13 +122,35 @@ public class Principal {
     private void atualizarDescricao() {
         listarTodasTarefas();
 
-        System.out.println("Digite o número da tarefa que você deseja alterar: ");
+        System.out.println("Digite o ID da tarefa que você deseja alterar: ");
         long idTarefa = teclado.nextInt();
         teclado.nextLine();
         Tarefa tarefa = tarefaService.buscaPorId(idTarefa);
         System.out.println("Agora digite a descrição nova: ");
         String novaDescricao = teclado.nextLine();
         tarefa.setDescricao(novaDescricao);
+        tarefa.setConcluida(false);
         tarefaService.adicionarTarefaNoBanco(tarefa);
+    }
+
+    private void concluirTarefa() {
+        listarTarefasEmAndamento();
+
+        System.out.println("Digite o número da tarefa que você deseja alterar: ");
+        long idTarefa = teclado.nextInt();
+        teclado.nextLine();
+        Tarefa tarefa = tarefaService.buscaPorId(idTarefa);
+        tarefa.setConcluida(true);
+        tarefaService.adicionarTarefaNoBanco(tarefa);
+
+    }
+
+    private void deletarTarefa() {
+        listarTodasTarefas();
+        System.out.println("Digite o número da tarefa que você deseja deletar: ");
+        long idTarefa = teclado.nextInt();
+        teclado.nextLine();
+        tarefaService.deletaPorId(idTarefa);
+        System.out.println("Tarefa deletada com sucesso!");
     }
 }
